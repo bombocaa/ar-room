@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Room AR</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="ar-button-container">
+    <button id="ar-button" class="ar-button">
+      <i class="fas fa-cube"></i>
+      <span>View in AR</span>
+    </button>
+  </div>
+
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <!-- Unit 1 -->
+      <div class="swiper-slide">
+        <model-viewer
+          class="swiper-no-swiping"
+          src="room.glb"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          camera-controls
+          auto-rotate
+          shadow-intensity="1"
+          ar-scale="fixed"
+          ar-placement="floor"
+          interaction-prompt="auto"
+          camera-orbit="0deg 75deg 105%"
+          min-camera-orbit="auto auto 50%"
+          max-camera-orbit="auto auto 150%"
+          alt="Unit 1 in AR"
+          loading="eager"
+          reveal="auto"
+          onerror="handleModelError(event)">
+        </model-viewer>
+        <div class="unit-info">
+          <h3>Front Unit</h3>
+          <ul>
+            <li>AIR CONDITIONER UNIT</li>
+            <li>SEPARATE BATHROOM & CR</li>
+            <li>COUNTER TOP</li>
+            <li>BUNK BEDS WITH MATTRESS</li>
+            <li>CABINETS</li>
+            <li>STUDY TABLE</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Unit 2 -->
+      <div class="swiper-slide">
+        <model-viewer
+          class="swiper-no-swiping"
+          src="room2.glb"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          camera-controls
+          auto-rotate
+          shadow-intensity="1"
+          ar-scale="fixed"
+          ar-placement="floor"
+          interaction-prompt="auto"
+          camera-orbit="0deg 75deg 105%"
+          min-camera-orbit="auto auto 50%"
+          max-camera-orbit="auto auto 150%"
+          alt="Unit 2 in AR"
+          loading="eager"
+          reveal="auto"
+          onerror="handleModelError(event)">
+        </model-viewer>
+        <div class="unit-info">
+          <h3>Side A Unit</h3>
+          <ul>
+            <li>AIR CONDITIONER UNIT</li>
+            <li>BATHROOM/CR</li>
+            <li>LAVATORY SINK</li>
+            <li>BUNK BEDS WITH MATTRESS</li>
+            <li>CABINETS</li>
+            <li>DRAWER</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Navigation -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <script>
+    // Error handling for model loading
+    function handleModelError(event) {
+      console.error('Error loading model:', event.detail);
+      alert('Error loading 3D model. Please check if the file exists and is in the correct format.');
+    }
+
+    // Initialize Swiper
+    const swiper = new Swiper('.swiper-container', {
+      effect: 'fade',
+      fadeEffect: {
+        crossFade: true
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      noSwiping: true,
+      noSwipingClass: 'swiper-no-swiping',
+      on: {
+        slideChange: function () {
+          // Update AR button to work with current model
+          const currentModelViewer = document.querySelector('.swiper-slide-active model-viewer');
+          arButton.onclick = () => currentModelViewer.activateAR();
+        }
+      }
+    });
+
+    const arButton = document.getElementById('ar-button');
+
+    // Handle AR button click
+    arButton.addEventListener('click', () => {
+      const currentModelViewer = document.querySelector('.swiper-slide-active model-viewer');
+      if (currentModelViewer) {
+        currentModelViewer.activateAR();
+      } else {
+        alert('Please wait for the 3D model to load completely.');
+      }
+    });
+
+  </script>
+</body>
+</html>
